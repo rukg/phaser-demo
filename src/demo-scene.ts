@@ -6,12 +6,18 @@ export class DemoScene extends Phaser.Scene {
 
     private cursors: CursorKeys;
     private player: SpriteWithDynamicBody;
+    private crypster: SpriteWithDynamicBody;
+    private enemy: SpriteWithDynamicBody;
+
 
     preload() {
         this.load.image('sky', 'assets/sky.png');
         this.load.image('ground', 'assets/platform.png');
         this.load.image('star', 'assets/star.png');
         this.load.image('bomb', 'assets/bomb.png');
+        this.load.spritesheet('crypster', 'assets/crypster.png', {frameWidth: 100, frameHeight: 100})
+        this.load.spritesheet('enemy', 'assets/enemy-crypster.png', {frameWidth: 100, frameHeight: 100})
+
         this.load.spritesheet('dude', 'assets/dude.png', {frameWidth: 32, frameHeight: 48});
     }
 
@@ -25,10 +31,32 @@ export class DemoScene extends Phaser.Scene {
         platforms.create(50, 250, 'ground');
         platforms.create(750, 220, 'ground');
 
-        this.player = this.physics.add.sprite(100, 450, 'dude');
+        // this.player = this.physics.add.sprite(100, 450, 'dude');
+        // this.player.setBounce(0.2);
+        // this.player.setCollideWorldBounds(true);
 
-        this.player.setBounce(0.2);
-        this.player.setCollideWorldBounds(true);
+        this.crypster = this.physics.add.sprite(100, 450, 'crypster');
+        this.crypster.setBounce(0.2);
+        this.crypster.setCollideWorldBounds(true);
+
+        this.anims.create({
+            key: 'crypo',
+            frames: this.anims.generateFrameNumbers('crypster', {start: 0, end: 5}),
+            frameRate: 7,
+            repeat: -1
+        })
+
+
+        this.enemy = this.physics.add.sprite(250, 450, 'enemy');
+        this.enemy.setBounce(0.2);
+        this.enemy.setCollideWorldBounds(true);
+
+        this.anims.create({
+            key: 'enemy',
+            frames: this.anims.generateFrameNumbers('enemy', {start: 0, end: 5}),
+            frameRate: 6,
+            repeat: -1
+        })
 
         this.anims.create({
             key: 'left',
@@ -39,32 +67,39 @@ export class DemoScene extends Phaser.Scene {
 
         this.anims.create({
             key: 'right',
-            frames: this.anims.generateFrameNumbers('dude', { start: 4, end: 8}),
+            frames: this.anims.generateFrameNumbers('dude', {start: 4, end: 8}),
             frameRate: 10,
             repeat: -1
         })
 
         this.cursors = this.input.keyboard.createCursorKeys();
 
-        this.physics.add.collider(this.player, platforms);
+        // this.physics.add.collider(this.player, platforms);
+        this.physics.add.collider(this.crypster, platforms);
+        this.physics.add.collider(this.enemy, platforms);
+
     }
 
     update() {
 
-        if (this.cursors.left.isDown) {
-            this.player.setVelocityX(-160);
+        this.crypster.anims.play('crypo', true);
+        this.enemy.anims.play('enemy', true);
 
-            this.player.anims.play('left', true);
-        }
 
-        if (this.cursors.right.isDown) {
-            this.player.setVelocityX(160);
-            this.player.anims.play('right', true);
-        }
-
-        if (this.cursors.up.isDown) {
-            this.player.setVelocityY(-330);
-        }
+        // if (this.cursors.left.isDown) {
+        //     this.player.setVelocityX(-160);
+        //
+        //     this.player.anims.play('left', true);
+        // }
+        //
+        // if (this.cursors.right.isDown) {
+        //     this.player.setVelocityX(160);
+        //     this.player.anims.play('right', true);
+        // }
+        //
+        // if (this.cursors.up.isDown) {
+        //     this.player.setVelocityY(-330);
+        // }
     }
 
 }
