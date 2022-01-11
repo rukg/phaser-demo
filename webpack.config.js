@@ -1,12 +1,12 @@
 const path = require('path');
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const package = require('./package.json');
 
 module.exports = {
-  entry: './src/index.ts',
+  entry: path.resolve(__dirname, './src/index.ts'),
   devServer: {
-    static: './dist'
+    static: path.resolve(__dirname, "./dist"),
   },
   module: {
     rules: [
